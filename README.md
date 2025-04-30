@@ -1,60 +1,67 @@
-🗣️ KinyaWhisperLang
-KinyaWhisperLang is a personalized adaptation of OpenAI’s Whisper model, fine-tuned for Kinyarwanda automatic speech recognition (ASR). This project is aimed at contributing to accessible voice AI for underrepresented languages like Kinyarwanda, and serves as a baseline for future experimentation and research.
+🗣️ KinyaWhisperLang - Batch Audio Transcriber
+KinyaWhisperLang is a powerful, lightweight batch transcription tool that leverages a fine-tuned version of OpenAI’s Whisper model to perform automatic speech recognition (ASR) on Kinyarwanda .wav audio files. Designed to process entire directories of audio at once, it's a practical solution for researchers, developers, and linguists working with low-resource languages.
 
-🤗 Hugging Face Model
-You can host your own fine-tuned model on Hugging Face and use it like this:
+🚀 What It Does
+The included script batch_inference.py:
 
-python
-Copy
-Edit
-from transformers import WhisperProcessor, WhisperForConditionalGeneration
-import torchaudio
+Loads a custom fine-tuned Whisper model for Kinyarwanda
 
-# Load fine-tuned KinyaWhisperLang model and processor from Hugging Face
-model = WhisperForConditionalGeneration.from_pretrained("your-username/kinyaWhisperLang")
-processor = WhisperProcessor.from_pretrained("your-username/kinyaWhisperLang")
+Processes all .wav audio files in a specified directory
 
-# Load and preprocess audio
-waveform, sample_rate = torchaudio.load("your_audio.wav")
-inputs = processor(waveform.squeeze(), sampling_rate=sample_rate, return_tensors="pt")
+Automatically transcribes each file to text
 
-# Generate prediction
-predicted_ids = model.generate(inputs["input_features"])
-transcription = processor.batch_decode(predicted_ids, skip_special_tokens=True)[0]
+Saves the transcriptions to a single output file
 
-print("🗣️ Transcription:", transcription)
-🏋️ Training Details
-Model: openai/whisper-small
+📂 Directory Structure
+Your project folder should look like this:
 
-Epochs: 80
 
-Batch size: 4
+KinyaWhisperLang/
+├── Audio/                  # Folder containing your .wav audio files
+│   ├── sample1.wav
+│   ├── sample2.wav
+│   └── ...
+├── kinya-whisper-model/    # Your local fine-tuned Whisper model folder
+├── batch_inference.py      # Batch transcription script
+└── transcriptions.txt      # Output file with transcriptions (auto-generated)
+🧠 How It Works
 
-Learning rate: 1e-5
+model = WhisperForConditionalGeneration.from_pretrained("kinya-whisper-model")
+processor = WhisperProcessor.from_pretrained("kinya-whisper-model")
+It loops through all .wav files in the Audio/ folder, applies preprocessing (resampling, mono conversion), generates transcriptions using your Whisper model, and writes the results to transcriptions.txt.
 
-Optimizer: Adam
+🛠️ Requirements
+Make sure you have the following Python packages installed:
 
-Final loss: 0.00024
 
-WER (Word Error Rate): 51.85%
+pip install transformers torchaudio
+▶️ Usage
+Simply run:
 
-⚠️ Limitations
-This is an early-stage prototype trained on a small dataset (102 samples). It performs best on short, clean Kinyarwanda audio. It may struggle with background noise, long-form speech, or domain-specific vocabulary. It is not yet ready for production use.
+python batch_inference.py
+Make sure:
 
-📚 Citation
-If you use this project or model, please cite:
+Your audio files are in the Audio/ directory
 
-bibtex
-Copy
-Edit
-@misc{batete2025kinyawhisperlang,
-  author       = {Batete},
-  title        = {KinyaWhisperLang: Fine-Tuning Whisper for Kinyarwanda ASR},
-  year         = {2025},
-  howpublished = {\url{https://github.com/Batete05/kinyaWhisperLang}},
-  note         = {Version 1.0}
-}
-📬 Contact
-Maintained by Batete (Batete05)
-✉️ bateteangenadette@gmail.com
-🔗 https://github.com/Batete05
+Your fine-tuned Whisper model is saved in a folder called kinya-whisper-model/
+
+✨ Features
+✅ Fully automatic transcription of audio folders
+
+✅ Handles stereo/mono conversion and resampling to 16kHz
+
+✅ Supports clean logging and error handling
+
+✅ Saves results in a clean, structured .txt file
+
+📌 Notes
+This script is optimized for short, clear Kinyarwanda speech samples.
+
+Ideal for batch processing small datasets or evaluating model performance quickly.
+
+Not intended for real-time transcription or noisy long-form data.
+
+📄 Example Output (transcriptions.txt)
+sample1.wav: Mwaramutse neza, nitwa Ange.
+sample2.wav: Abanyarwanda bakunda igihugu cyabo.
+sample3.wav: ERROR - File corrupted or unreadable.
