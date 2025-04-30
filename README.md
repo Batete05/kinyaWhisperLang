@@ -63,5 +63,7 @@ Not intended for real-time transcription or noisy long-form data.
 
 📄 Example Output (transcriptions.txt)
 sample1.wav: Mwaramutse neza, nitwa Ange.
+
 sample2.wav: Abanyarwanda bakunda igihugu cyabo.
+
 sample3.wav: ERROR - File corrupted or unreadable.
